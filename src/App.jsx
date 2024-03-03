@@ -7,6 +7,14 @@ import ForgotPassword from "./Auth/ForgotPassword";
 import ForgotPasswordEmailSent from "./Auth/ForgotPasswordEmailSent";
 import ResetPassword from "./Auth/ResetPassword";
 import ResetPasswordSuccess from "./Auth/ResetPasswordSuccess";
+import {
+  useQuery,
+  useMutation,
+  useQueryClient,
+  QueryClient,
+  QueryClientProvider,
+} from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 function App() {
   const router = createBrowserRouter([
@@ -45,9 +53,15 @@ function App() {
     },
   ]);
 
+  // Create a client
+  const queryClient = new QueryClient();
+
   return (
     <>
-      <RouterProvider router={router} />
+      <QueryClientProvider client={queryClient}>
+        <RouterProvider router={router} />
+        <ReactQueryDevtools initialIsOpen={false} />
+      </QueryClientProvider>
     </>
   );
 }
