@@ -4,11 +4,12 @@ import { MdMarkEmailRead } from "react-icons/md";
 import { useLocation, useParams } from "react-router-dom";
 import { registerEmailVerification } from "../api/query/userQuery";
 import { toast } from "react-toastify";
+import Spinner from "../components/Spinner";
 
 const RegisterEmailVerify = () => {
   const { email } = useParams();
 
-  const { mutate } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: registerEmailVerification,
     mutationKey: ["registerEmailVerification"],
     onSuccess: (data) => {
@@ -47,7 +48,7 @@ const RegisterEmailVerify = () => {
           onClick={handleClick}
           className="border border-yellow-400 text-yellow-400 rounded-lg w-full py-2 mt-2"
         >
-          Re-Send Email
+          {isPending ? <Spinner /> : "Re-Send Email"}
         </button>
       </div>
     </div>

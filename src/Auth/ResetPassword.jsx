@@ -7,6 +7,7 @@ import { useMutation } from "@tanstack/react-query";
 import { resetPassword } from "../api/query/userQuery";
 import { toast } from "react-toastify";
 import { useNavigate, useParams } from "react-router-dom";
+import Spinner from "../components/Spinner";
 const ResetPassword = () => {
   const { token } = useParams();
   const navigate = useNavigate();
@@ -20,7 +21,7 @@ const ResetPassword = () => {
     resolver: yupResolver(resetPasswordSchema),
   });
 
-  const { mutate } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: resetPassword,
     mutationKey: ["resetPassword"],
     onSuccess: (data) => {
@@ -63,7 +64,7 @@ const ResetPassword = () => {
             type="submit"
             className="bg-yellow-400 text-white rounded-lg w-full py-2 mt-2 mb-2"
           >
-            Reset Password
+            {isPending ? <Spinner /> : "Reset Password"}
           </button>
         </form>
       </div>

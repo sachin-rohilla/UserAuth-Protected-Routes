@@ -8,6 +8,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import { forgotPasswordEmail } from "../api/query/userQuery";
 import { toast } from "react-toastify";
+import Spinner from "../components/Spinner";
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState(null);
@@ -22,7 +23,7 @@ const ForgotPassword = () => {
     resolver: yupResolver(forgotPasswordSchema),
   });
 
-  const { mutate } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: forgotPasswordEmail,
     mutationKey: ["forgotPasswordEmail"],
     onSuccess: (data) => {
@@ -65,7 +66,7 @@ const ForgotPassword = () => {
             type="submit"
             className="bg-yellow-400 text-white rounded-lg w-full py-2 mt-2 mb-2"
           >
-            Forgot Password
+            {isPending ? <Spinner /> : "Forgot Password"}
           </button>
         </form>
       </div>

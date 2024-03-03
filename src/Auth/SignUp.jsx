@@ -7,6 +7,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { signUp } from "../api/query/userQuery";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-toastify";
+import Spinner from "../components/Spinner";
 
 const SignUp = () => {
   const [email, setEmail] = useState(null);
@@ -22,13 +23,13 @@ const SignUp = () => {
     resolver: yupResolver(signUpSchema),
   });
 
-  const { mutate } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: signUp,
     mutationKey: ["signUp"],
     onSuccess: (data) => {
       toast.success("User created successfully");
       reset();
-      navigate(`/register-email-verify /${email}`);
+      navigate(`/register-email-verify/${email}`);
     },
     onError: (error) => {
       toast.error(error.message);
@@ -86,7 +87,7 @@ const SignUp = () => {
             type="submit"
             className="bg-yellow-400 text-white rounded-lg w-full py-2 mt-2 mb-2"
           >
-            Sign Up
+            {isPending ? <Spinner /> : "Sign Up"}
           </button>
         </form>
         <Link to="/signIn" className="text-sm ">
