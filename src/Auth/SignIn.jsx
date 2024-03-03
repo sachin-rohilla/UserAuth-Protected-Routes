@@ -8,6 +8,8 @@ import { signIn } from "../api/query/userQuery";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { AuthContext } from "../Provider/AuthProvider";
+import { PiSpinner } from "react-icons/pi";
+import Spinner from "../components/Spinner";
 
 const SignIn = () => {
   const navigate = useNavigate();
@@ -22,11 +24,12 @@ const SignIn = () => {
     resolver: yupResolver(signInSchema),
   });
 
-  const { mutate, isError, error } = useMutation({
+  const { mutate, isError, error, isPending } = useMutation({
     mutationFn: signIn,
     mutationKey: ["signIn"],
     onSuccess: (data) => {
-      window.location.href = "/";
+      // window.location.href = "/";
+      navigate("/");
       if (data?.data?.token) {
         login(data?.data?.token);
       }
@@ -69,9 +72,9 @@ const SignIn = () => {
 
           <button
             type="submit"
-            className="bg-yellow-400 text-white rounded-lg w-full py-2 mt-2 mb-2"
+            className="bg-yellow-400 text-white rounded-lg w-full py-2 mt-2 mb-2  "
           >
-            Sign In
+            {isPending ? <Spinner /> : "Sign In"}
           </button>
         </form>
 

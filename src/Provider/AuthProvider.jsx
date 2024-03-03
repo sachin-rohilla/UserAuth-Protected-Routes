@@ -11,21 +11,18 @@ const AuthProvider = ({ children }) => {
   // const navigate = useNavigate();
 
   const login = (data) => {
-    setToken(data);
-    const storeToken = jwtDecode(data);
-    setCookie("jwt", storeToken, {
-      path: "/",
-      maxAge: exp,
-      sameSite: true,
-    });
-    setUser(storeToken);
+    if (data) {
+      setToken(data);
+      const storeToken = jwtDecode(data);
+      setCookie("jwt", storeToken);
+      setUser(storeToken);
+    }
   };
   const logout = () => {
     setToken(null);
     setUser(null);
     removeCookie("jwt");
     window.location.href = "/signIn";
-    console.log("hello");
   };
   return (
     <AuthContext.Provider value={{ user, token, login, logout }}>
