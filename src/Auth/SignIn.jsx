@@ -4,6 +4,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { signInSchema } from "../FormSchema/formSchema";
 import InputComp from "../components/InputComp";
 import { Link } from "react-router-dom";
+import { signIn } from "../api/query/userQuery";
+import { useMutation } from "@tanstack/react-query";
 
 const SignIn = () => {
   // React Hook Form
@@ -16,10 +18,16 @@ const SignIn = () => {
     resolver: yupResolver(signInSchema),
   });
 
+  const { mutate, isError, error } = useMutation({
+    mutationFn: signIn,
+    mutationKey: ["signIn"],
+  });
+
   // Handle form submission
   const onSubmit = (data) => {
-    console.log(data);
+    mutate(data);
   };
+
   return (
     <div className="flex items-center justify-center h-screen">
       <div className="w-96  shadow-lg rounded-lg  p-8">
