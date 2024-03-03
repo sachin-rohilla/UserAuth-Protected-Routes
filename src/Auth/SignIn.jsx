@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { signInSchema } from "../FormSchema/formSchema";
@@ -7,9 +7,11 @@ import { Link, useNavigate } from "react-router-dom";
 import { signIn } from "../api/query/userQuery";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-toastify";
+import { AuthContext } from "../Provider/AuthProvider";
 
 const SignIn = () => {
   const navigate = useNavigate();
+  const { login, token } = useContext(AuthContext);
   // React Hook Form
   const {
     register,
@@ -24,7 +26,10 @@ const SignIn = () => {
     mutationFn: signIn,
     mutationKey: ["signIn"],
     onSuccess: (data) => {
-      navigate("/");
+      window.location.href = "/";
+      if (data?.data?.token) {
+        login(data?.data?.token);
+      }
     },
     onError: (error) => {
       toast.error(error.message);
