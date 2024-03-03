@@ -3,7 +3,13 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { resetPasswordSchema } from "../FormSchema/formSchema";
 import InputComp from "../components/InputComp";
+import { useMutation } from "@tanstack/react-query";
+import { resetPassword } from "../api/query/userQuery";
+import { toast } from "react-toastify";
+import { useNavigate, useParams } from "react-router-dom";
 const ResetPassword = () => {
+  const { token } = useParams();
+  const navigate = useNavigate();
   // React Hook Form
   const {
     register,
@@ -14,9 +20,23 @@ const ResetPassword = () => {
     resolver: yupResolver(resetPasswordSchema),
   });
 
+  const { mutate } = useMutation({
+    mutationFn: resetPassword,
+    mutationKey: ["resetPassword"],
+    onSuccess: (data) => {
+      navigate("/reset-password-success");
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
+
   // Handle form submission
   const onSubmit = (data) => {
-    console.log(data);
+    mutate({
+      token: token,
+      password: data.newPassword,
+    });
   };
 
   return (

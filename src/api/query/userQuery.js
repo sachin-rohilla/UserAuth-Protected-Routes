@@ -68,3 +68,18 @@ export const forgotPasswordEmail = async (email) => {
     throw new Error(err.response?.data?.message || "An error occurred");
   }
 };
+
+export const resetPassword = async ({ token, password }) => {
+  try {
+    const response = await Axios.post(
+      "http://localhost:9000/user//verify-forgot-mail",
+      {
+        token,
+        password,
+      }
+    );
+    return response;
+  } catch (err) {
+    throw new Error(err.response?.data?.message || "An error occurred");
+  }
+};

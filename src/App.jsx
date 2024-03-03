@@ -18,6 +18,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Home from "./components/Home";
+import AuthProvider from "./Provider/AuthProvider";
 
 function App() {
   const router = createBrowserRouter([
@@ -45,9 +46,9 @@ function App() {
       path: "/forgot-password",
       element: <ForgotPassword />,
     },
-    { path: "forgot-email-sent", element: <ForgotPasswordEmailSent /> },
+    { path: "/forgot-email-sent/:email", element: <ForgotPasswordEmailSent /> },
     {
-      path: "/reset-password",
+      path: "/forgot-password-verify/:token",
       element: <ResetPassword />,
     },
     {
@@ -61,11 +62,13 @@ function App() {
 
   return (
     <>
-      <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
-        <ReactQueryDevtools initialIsOpen={false} />
-      </QueryClientProvider>
-      <ToastContainer />
+      <AuthProvider>
+        <QueryClientProvider client={queryClient}>
+          <RouterProvider router={router} />
+          <ReactQueryDevtools initialIsOpen={false} />
+        </QueryClientProvider>
+        <ToastContainer />
+      </AuthProvider>
     </>
   );
 }

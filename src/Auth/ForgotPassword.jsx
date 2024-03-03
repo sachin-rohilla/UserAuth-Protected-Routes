@@ -1,15 +1,18 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { IoMdArrowBack } from "react-icons/io";
 import InputComp from "../components/InputComp";
 import { forgotPasswordSchema } from "../FormSchema/formSchema";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import { forgotPasswordEmail } from "../api/query/userQuery";
 import { toast } from "react-toastify";
 
 const ForgotPassword = () => {
+  const [email, setEmail] = useState(null);
+  const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
@@ -23,11 +26,10 @@ const ForgotPassword = () => {
     mutationFn: forgotPasswordEmail,
     mutationKey: ["forgotPasswordEmail"],
     onSuccess: (data) => {
-      toast.success("Please check your email to reset your password.");
       console.log(data?.data?.message);
+      navigate(`/forgot-email-sent/${email}`);
     },
     onError: (error) => {
-      console.log(error?.message);
       toast.error(error?.message);
     },
   });
@@ -35,7 +37,7 @@ const ForgotPassword = () => {
   // Handle form submission
   const onSubmit = (data) => {
     mutate(data?.email);
-    console.log(data);
+    setEmail(data?.email);
   };
   return (
     <div className="flex justify-center items-center h-screen">
