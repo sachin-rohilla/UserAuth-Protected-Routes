@@ -15,12 +15,15 @@ import {
   QueryClientProvider,
 } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import Home from "./components/Home";
 
 function App() {
   const router = createBrowserRouter([
     {
       path: "/",
-      element: <h1>hello world</h1>,
+      element: <Home />,
     },
     {
       path: "/signUp",
@@ -31,11 +34,11 @@ function App() {
       element: <SignIn />,
     },
     {
-      path: "/register-email-verify",
+      path: "/register-email-verify/:email",
       element: <RegisterEmailVerify />,
     },
     {
-      path: "/register-success",
+      path: "/email-verify/:token",
       element: <RegisterEmailSuccess />,
     },
     {
@@ -62,6 +65,7 @@ function App() {
         <RouterProvider router={router} />
         <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>
+      <ToastContainer />
     </>
   );
 }

@@ -1,11 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { signUpSchema } from "../FormSchema/formSchema";
 import InputComp from "../components/InputComp";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { signUp } from "../api/query/userQuery";
+import { useMutation } from "@tanstack/react-query";
+import { toast } from "react-toastify";
 
 const SignUp = () => {
+  const [email, setEmail] = useState(null);
+  const navigate = useNavigate();
+
   // React Hook Form
   const {
     register,
@@ -16,9 +22,23 @@ const SignUp = () => {
     resolver: yupResolver(signUpSchema),
   });
 
+  const { mutate } = useMutation({
+    mutationFn: signUp,
+    mutationKey: ["signUp"],
+    onSuccess: (data) => {
+      toast.success("User created successfully");
+      reset();
+      navigate(`/register-email-verify /${email}`);
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
+
   // Handle form submission
   const onSubmit = (data) => {
-    console.log(data);
+    mutate(data);
+    setEmail(data?.email);
   };
 
   return (

@@ -5,6 +5,9 @@ import { IoMdArrowBack } from "react-icons/io";
 import InputComp from "../components/InputComp";
 import { forgotPasswordSchema } from "../FormSchema/formSchema";
 import { Link } from "react-router-dom";
+import { useMutation } from "@tanstack/react-query";
+import { forgotPasswordEmail } from "../api/query/userQuery";
+import { toast } from "react-toastify";
 
 const ForgotPassword = () => {
   const {
@@ -16,8 +19,22 @@ const ForgotPassword = () => {
     resolver: yupResolver(forgotPasswordSchema),
   });
 
+  const { mutate } = useMutation({
+    mutationFn: forgotPasswordEmail,
+    mutationKey: ["forgotPasswordEmail"],
+    onSuccess: (data) => {
+      toast.success("Please check your email to reset your password.");
+      console.log(data?.data?.message);
+    },
+    onError: (error) => {
+      console.log(error?.message);
+      toast.error(error?.message);
+    },
+  });
+
   // Handle form submission
   const onSubmit = (data) => {
+    mutate(data?.email);
     console.log(data);
   };
   return (
@@ -46,7 +63,7 @@ const ForgotPassword = () => {
             type="submit"
             className="bg-yellow-400 text-white rounded-lg w-full py-2 mt-2 mb-2"
           >
-            Reset Password
+            Forgot Password
           </button>
         </form>
       </div>

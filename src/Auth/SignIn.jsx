@@ -3,11 +3,13 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { signInSchema } from "../FormSchema/formSchema";
 import InputComp from "../components/InputComp";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { signIn } from "../api/query/userQuery";
 import { useMutation } from "@tanstack/react-query";
+import { toast } from "react-toastify";
 
 const SignIn = () => {
+  const navigate = useNavigate();
   // React Hook Form
   const {
     register,
@@ -21,6 +23,12 @@ const SignIn = () => {
   const { mutate, isError, error } = useMutation({
     mutationFn: signIn,
     mutationKey: ["signIn"],
+    onSuccess: (data) => {
+      navigate("/");
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
   });
 
   // Handle form submission
