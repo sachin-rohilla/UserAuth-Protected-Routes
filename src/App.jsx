@@ -19,20 +19,34 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Home from "./components/Home";
 import AuthProvider from "./Provider/AuthProvider";
+import ProtectedRoutes from "./components/ProtectedRoutes/ProtectedRoutes";
+import AlreadyLogin from "./components/ProtectedRoutes/AlreadyLogin";
 
 function App() {
   const router = createBrowserRouter([
     {
       path: "/",
-      element: <Home />,
+      element: (
+        <ProtectedRoutes>
+          <Home />
+        </ProtectedRoutes>
+      ),
     },
     {
       path: "/signUp",
-      element: <SignUp />,
+      element: (
+        <AlreadyLogin>
+          <SignUp />
+        </AlreadyLogin>
+      ),
     },
     {
       path: "/signIn",
-      element: <SignIn />,
+      element: (
+        <AlreadyLogin>
+          <SignIn />
+        </AlreadyLogin>
+      ),
     },
     {
       path: "/register-email-verify/:email",
